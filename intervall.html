@@ -16,7 +16,7 @@
 </head>
 <body>
   <h1>Intervall</h1>
-  <p>Intervalltraining mit 8 × (15s Sprint + 15s Pause)</p>
+  <p>Intervalltraining mit 10 × (15s Sprint + 15s Pause)</p>
   <table id="phaseTable">
     <thead><tr><th>Phase</th><th>Dauer (s)</th><th>Beschreibung</th><th>RPM</th><th>% HFmax</th></tr></thead>
     <tbody id="tbody"></tbody>
@@ -31,7 +31,6 @@
 <script>
 const phases = [
   { name: "Aufwärmen", duration: 300, desc: "5 Min. Leichter Widerstand steigernd", rpm: "70-80", hf: "50-60" },
-  // 8x Intervall und Pause
   { name: "Intervall 1", duration: 15, desc: "15 Sek. sehr hart", rpm: "100-110", hf: "85-100" },
   { name: "Pause 1", duration: 15, desc: "15 Sek. Sehr locker", rpm: "60-70", hf: "50-60" },
   { name: "Intervall 2", duration: 15, desc: "15 Sek. sehr hart", rpm: "100-110", hf: "85-100" },
@@ -48,6 +47,10 @@ const phases = [
   { name: "Pause 7", duration: 15, desc: "15 Sek. Sehr locker", rpm: "60-70", hf: "50-60" },
   { name: "Intervall 8", duration: 15, desc: "15 Sek. sehr hart", rpm: "100-110", hf: "85-100" },
   { name: "Pause 8", duration: 15, desc: "15 Sek. Sehr locker", rpm: "60-70", hf: "50-60" },
+  { name: "Intervall 9", duration: 15, desc: "15 Sek. sehr hart", rpm: "100-110", hf: "85-100" },
+  { name: "Pause 9", duration: 15, desc: "15 Sek. Sehr locker", rpm: "60-70", hf: "50-60" },
+  { name: "Intervall 10", duration: 15, desc: "15 Sek. sehr hart", rpm: "100-110", hf: "85-100" },
+  { name: "Pause 10", duration: 15, desc: "15 Sek. Sehr locker", rpm: "60-70", hf: "50-60" },
   { name: "Cool-Down", duration: 600, desc: "10 Min. Locker fahren, niedriger Widerstand", rpm: "60", hf: "40-50" }
 ];
 
