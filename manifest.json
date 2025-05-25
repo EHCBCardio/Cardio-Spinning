@@ -1,0 +1,6 @@
+{
+  "name": "EHCB Cardio App",
+  "short_name": "EHCB Cardio",
+  "start_url": ".",
+  "display": "standalone"
+}
