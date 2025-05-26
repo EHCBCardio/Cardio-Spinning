@@ -1,145 +1,165 @@
-<!DOCTYPE html>
-<html lang="de">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HIIT</title>
-  <style>
-    body { background: #001F4E; color: white; font-family: sans-serif; padding: 2rem; }
-    h1 { color: #FFD700; text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; color: black; }
-    th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: center; }
-    .active { background: #C80000; color: white; }
-    .button { background: #C80000; color: white; padding: 0.8rem 1.5rem; margin: 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
-    .coach-controls { margin-top: 2rem; text-align: center; }
-    input[type='password'] { padding: 0.4rem; margin-right: 0.5rem; }
-    @media (max-width: 600px) {
-      th, td { font-size: 0.8rem; }
-      .button { font-size: 0.9rem; }
-    }
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
   </style>
 </head>
 <body>
-  <h1>HIIT</h1>
-  <p style="text-align:center;">10 Min. Aufwärmen – 10× (45s hart / 60s Pause) – 10 Min. Cooldown</p>
-
-  <table id="phaseTable">
-    <thead><tr><th>Phase</th><th>Dauer (s)</th><th>Beschreibung</th><th>RPM</th><th>% HFmax</th></tr></thead>
-    <tbody id="tbody"></tbody>
-  </table>
-
-  <p id="status">Bereit</p>
-  <p id="timer">0</p>
-  <div style="text-align:center;">
-    <button class="button" onclick="startWorkout()">Start</button>
-    <button class="button" onclick="stopWorkout()">Pause</button>
-    <button class="button" onclick="resetWorkout()">Reset</button>
-  </div>
-
-  <div class="coach-controls">
-    <input type="password" id="pw" placeholder="Coach-Passwort" />
-    <button class="button" onclick="enableCoach()">Coach-Modus starten</button>
-  </div>
-
-<script>
-const phases = [
-  { name: "Aufwärmen", duration: 600, desc: "10 Min. locker einfahren", rpm: "70–80", hf: "60–70" },
-  ...Array.from({length: 10}, (_, i) => [
-    { name: `Intervall ${i+1}`, duration: 45, desc: "Hohe Intensität", rpm: "95–105", hf: "85–100" },
-    { name: `Pause ${i+1}`, duration: 60, desc: "Aktive Erholung", rpm: "60–70", hf: "50–60" }
-  ]).flat(),
-  { name: "Cooldown", duration: 600, desc: "10 Min. ausfahren", rpm: "60–70", hf: "50–60" }
-];
-
-let currentPhase = -1;
-let countdown = 3;
-let timeLeft = 0;
-let timerId = null;
-
-const tbody = document.getElementById("tbody");
-
-phases.forEach((p, i) => {
-  const row = document.createElement("tr");
-  row.id = "phaseRow" + i;
-  row.innerHTML = `
-    <td contenteditable="false">${p.name}</td>
-    <td contenteditable="false">${p.duration}</td>
-    <td contenteditable="false">${p.desc}</td>
-    <td contenteditable="false">${p.rpm}</td>
-    <td contenteditable="false">${p.hf}</td>
-  `;
-  tbody.appendChild(row);
-});
-
-function highlightPhase(index) {
-  phases.forEach((_, i) => {
-    document.getElementById("phaseRow" + i).className = i === index ? "active" : "";
-  });
-}
-
-function startWorkout() {
-  if (timerId) return;
-  if (currentPhase === -1) {
-    currentPhase = 0;
-    timeLeft = countdown;
-    document.getElementById("status").innerText = "Bereit? In 3 Sekunden geht's los...";
-    highlightPhase(currentPhase);
-  }
-  timerId = setInterval(() => {
-    document.getElementById("timer").innerText = timeLeft + " Sekunden";
-    if (timeLeft > 0) {
-      timeLeft--;
-    } else {
-      if (countdown > 0) {
-        countdown = 0;
-        const row = document.getElementById("phaseRow" + currentPhase);
-        timeLeft = parseInt(row.children[1].innerText);
-        document.getElementById("status").innerText = "Aktiv: " + row.children[0].innerText;
-      } else {
-        clearInterval(timerId);
-        timerId = null;
-        currentPhase++;
-        countdown = 3;
-        if (currentPhase < phases.length) {
-          highlightPhase(currentPhase);
-          timeLeft = countdown;
-          document.getElementById("status").innerText = "Nächste Phase in 3 Sekunden...";
-          startWorkout();
-        } else {
-          document.getElementById("status").innerText = "Training abgeschlossen!";
-          document.getElementById("timer").innerText = "0";
-          highlightPhase(-1);
-        }
-      }
-    }
-  }, 1000);
-}
-
-function stopWorkout() {
-  clearInterval(timerId);
-  timerId = null;
-}
-
-function resetWorkout() {
-  stopWorkout();
-  currentPhase = -1;
-  countdown = 3;
-  timeLeft = 0;
-  document.getElementById("status").innerText = "Bereit";
-  document.getElementById("timer").innerText = "0";
-  highlightPhase(-1);
-}
-
-function enableCoach() {
-  const pw = document.getElementById("pw").value;
-  if (pw !== "ehcb2025") {
-    alert("Falsches Passwort.");
-    return;
-  }
-  const cells = document.querySelectorAll("td");
-  cells.forEach(cell => cell.setAttribute("contenteditable", "true"));
-  alert("Coach-Modus aktiviert. Du kannst jetzt alle Zellen bearbeiten.");
-}
-</script>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="de"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;HIIT&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { background: #001F4E; color: white; font-family: sans-serif; padding: 2rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 { color: #FFD700; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; color: black; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.active { background: #C80000; color: white; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.button { background: #C80000; color: white; padding: 0.8rem 1.5rem; margin: 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.coach-controls { margin-top: 2rem; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>input[type='password'] { padding: 0.4rem; margin-right: 0.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 600px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>th, td { font-size: 0.8rem; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.button { font-size: 0.9rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;HIIT&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p style="text-align:center;"&gt;10 Min. Aufwärmen – 10× (45s hart / 60s Pause) – 10 Min. Cooldown&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;table id="phaseTable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Phase&lt;/th&gt;&lt;th&gt;Dauer (s)&lt;/th&gt;&lt;th&gt;Beschreibung&lt;/th&gt;&lt;th&gt;RPM&lt;/th&gt;&lt;th&gt;% HFmax&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;tbody id="tbody"&gt;&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/table&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p id="status"&gt;Bereit&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p id="timer"&gt;0&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="startWorkout()"&gt;Start&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="stopWorkout()"&gt;Pause&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="resetWorkout()"&gt;Reset&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coach-controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="password" id="pw" placeholder="Coach-Passwort" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="enableCoach()"&gt;Coach-Modus starten&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center; margin-top: 2rem;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;a href="index.html" class="button"&gt;⬅ Zurück zur Startseite&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">const phases = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Aufwärmen", duration: 600, desc: "10 Min. locker einfahren", rpm: "70–80", hf: "60–70" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>...Array.from({length: 10}, (_, i) =&gt; [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: `Intervall ${i+1}`, duration: 45, desc: "Hohe Intensität", rpm: "95–105", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: `Pause ${i+1}`, duration: 60, desc: "Aktive Erholung", rpm: "60–70", hf: "50–60" }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>]).flat(),</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name: "Cooldown", duration: 600, desc: "10 Min. ausfahren", rpm: "60–70", hf: "50–60" }</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">let currentPhase = -1;</p>
+<p class="p1">let countdown = 3;</p>
+<p class="p1">let timeLeft = 0;</p>
+<p class="p1">let timerId = null;</p>
+<p class="p2"><br></p>
+<p class="p1">const tbody = document.getElementById("tbody");</p>
+<p class="p2"><br></p>
+<p class="p1">phases.forEach((p, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const row = document.createElement("tr");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>row.id = "phaseRow" + i;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>row.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td contenteditable="false"&gt;${p.name}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td contenteditable="false"&gt;${p.duration}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td contenteditable="false"&gt;${p.desc}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td contenteditable="false"&gt;${p.rpm}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;td contenteditable="false"&gt;${p.hf}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tbody.appendChild(row);</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">function highlightPhase(index) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>phases.forEach((_, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("phaseRow" + i).className = i === index ? "active" : "";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function startWorkout() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (timerId) return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (currentPhase === -1) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>currentPhase = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>timeLeft = countdown;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("status").innerText = "Bereit? In 3 Sekunden geht's los...";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>highlightPhase(currentPhase);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>timerId = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("timer").innerText = timeLeft + " Sekunden";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (timeLeft &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timeLeft--;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (countdown &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>countdown = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const row = document.getElementById("phaseRow" + currentPhase);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeLeft = parseInt(row.children[1].innerText);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("status").innerText = "Aktiv: " + row.children[0].innerText;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>clearInterval(timerId);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timerId = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>currentPhase++;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>countdown = 3;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (currentPhase &lt; phases.length) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>highlightPhase(currentPhase);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>timeLeft = countdown;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText = "Nächste Phase in 3 Sekunden...";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>startWorkout();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText = "Training abgeschlossen!";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("timer").innerText = "0";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>highlightPhase(-1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}, 1000);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function stopWorkout() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearInterval(timerId);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>timerId = null;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function resetWorkout() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>stopWorkout();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>currentPhase = -1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>countdown = 3;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>timeLeft = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("status").innerText = "Bereit";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("timer").innerText = "0";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>highlightPhase(-1);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function enableCoach() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pw = document.getElementById("pw").value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (pw !== "ehcb2025") {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alert("Falsches Passwort.");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const cells = document.querySelectorAll("td");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cells.forEach(cell =&gt; cell.setAttribute("contenteditable", "true"));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>alert("Coach-Modus aktiviert. Du kannst jetzt alle Zellen bearbeiten.");</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
 </body>
 </html>
