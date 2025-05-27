@@ -1,2 +1,87 @@
-<!DOCTYPE html>
-<html><head><title>intervall</title></head><body><h1>Intervallseite vollständig erstellt ✅</h1></body></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="de"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Intervall&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { background: #001F4E; color: white; font-family: sans-serif; padding: 2rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 { color: #FFD700; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; color: black; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.active { background: #C80000; color: white; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.button { background: #C80000; color: white; padding: 0.8rem 1.5rem; margin: 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.coach-controls { margin-top: 2rem; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>input[type='password'] { padding: 0.4rem; margin-right: 0.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 600px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>th, td { font-size: 0.8rem; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.button { font-size: 0.9rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Intervall&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p style="text-align:center;"&gt;10× (15s Sprint / 15s Pause) – mit Aufwärmen und Cooldown&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;table id="phaseTable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Phase&lt;/th&gt;&lt;th&gt;Dauer (s)&lt;/th&gt;&lt;th&gt;Beschreibung&lt;/th&gt;&lt;th&gt;RPM&lt;/th&gt;&lt;th&gt;% HFmax&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;tbody id="tbody"&gt;&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/table&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p id="status"&gt;Bereit&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p id="timer"&gt;0&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="startWorkout()"&gt;Start&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="stopWorkout()"&gt;Pause&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="resetWorkout()"&gt;Reset&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="coach-controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="password" id="pw" placeholder="Coach-Passwort" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="button" onclick="enableCoach()"&gt;Coach-Modus starten&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center; margin-top: 2rem;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;a href="index.html" class="button"&gt;⬅ Zurück zur Startseite&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const phases = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Aufwärmen", duration: 300, desc: "5 Min locker einfahren", rpm: "70–80", hf: "60–70" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 1", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 1", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 2", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 2", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 3", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 3", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 4", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 4", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 5", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 5", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 6", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 6", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 7", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 7", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 8", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 8", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 9", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 9", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Intervall 10", duration: 15, desc: "Sprint sehr hart", rpm: "100–110", hf: "85–100" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Pause 10", duration: 15, desc: "Erholung", rpm: "60–70", hf: "50–60" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ name: "Cooldown", duration: 600, desc: "10 Min locker ausfahren", rpm: "60–70", hf: "50–60" }</p>
+</body>
+</html>
