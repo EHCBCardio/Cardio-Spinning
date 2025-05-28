@@ -5,23 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HIIT</title>
   <style>
-    body { background: #001F4E; color: white; font-family: sans-serif; padding: 2rem; }
-    h1 { color: #FFD700; text-align: center; }
+    body { background: #001F4E; color: white; font-family: sans-serif; margin: 0; padding: 2rem; }
+    h1 { color: #FFD700; text-align: center; margin-top: 100px; }
     table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; color: black; }
     th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: center; }
     .active { background: #C80000; color: white; }
     .button { background: #C80000; color: white; padding: 0.8rem 1.5rem; margin: 1rem; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
     .coach-controls { margin-top: 2rem; text-align: center; }
     input[type='password'] { padding: 0.4rem; margin-right: 0.5rem; }
-    @media (max-width: 600px) {
-      th, td { font-size: 0.8rem; }
-      .button { font-size: 0.9rem; }
+    #timer-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #C80000;
+      color: white;
+      font-size: 2.5rem;
+      padding: 1rem;
+      text-align: center;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
+  <div id="timer-bar"><span id="timer">0</span> Sekunden</div>
+
   <h1>HIIT</h1>
-  <p style="text-align:center;">10 Min. Aufwärmen – 10× (45s hart / 60s Pause) – 10 Min. Cooldown</p>
+  <p style="text-align:center;">10× 45 Sek. Belastung / 60 Sek. Pause – mit Warm-Up & Cooldown</p>
 
   <table id="phaseTable">
     <thead><tr><th>Phase</th><th>Dauer (s)</th><th>Beschreibung</th><th>RPM</th><th>% HFmax</th></tr></thead>
@@ -29,7 +38,6 @@
   </table>
 
   <p id="status">Bereit</p>
-  <p id="timer">0</p>
   <div style="text-align:center;">
     <button class="button" onclick="startWorkout()">Start</button>
     <button class="button" onclick="stopWorkout()">Pause</button>
@@ -47,12 +55,27 @@
 
 <script>
 const phases = [
-  { name: "Aufwärmen", duration: 600, desc: "10 Min. locker einfahren", rpm: "70–80", hf: "60–70" },
-  ...Array.from({length: 10}, (_, i) => [
-    { name: `Intervall ${i+1}`, duration: 45, desc: "Hohe Intensität", rpm: "95–105", hf: "85–100" },
-    { name: `Pause ${i+1}`, duration: 60, desc: "Aktive Erholung", rpm: "60–70", hf: "50–60" }
-  ]).flat(),
-  { name: "Cooldown", duration: 600, desc: "10 Min. ausfahren", rpm: "60–70", hf: "50–60" }
+  { name: "Warm-Up", duration: 600, desc: "10 Min locker einfahren", rpm: "70–80", hf: "60–70" },  { name: "Intervall 1", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 1", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 2", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 2", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 3", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 3", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 4", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 4", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 5", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 5", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 6", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 6", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 7", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 7", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 8", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 8", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 9", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 9", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Intervall 10", duration: 45, desc: "hohe Intensität", rpm: "90–100", hf: "85–100" },
+  { name: "Pause 10", duration: 60, desc: "Erholung", rpm: "60–70", hf: "50–60" },
+  { name: "Cooldown", duration: 600, desc: "10 Min locker ausfahren", rpm: "60–70", hf: "50–60" }
 ];
 
 let currentPhase = -1;
@@ -90,7 +113,7 @@ function startWorkout() {
     highlightPhase(currentPhase);
   }
   timerId = setInterval(() => {
-    document.getElementById("timer").innerText = timeLeft + " Sekunden";
+    document.getElementById("timer").innerText = timeLeft;
     if (timeLeft > 0) {
       timeLeft--;
     } else {
